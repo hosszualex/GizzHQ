@@ -1,4 +1,4 @@
-package com.example.gizzhq.ui
+package com.example.gizzhq.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,9 +32,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import coil.compose.AsyncImage
 import com.example.gizzhq.R
-import com.example.gizzhq.ui.theme.GizzHQTheme
+import com.example.gizzhq.presentation.theme.GizzHQTheme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             GizzHQTheme {
                 CreateNewsFeed()

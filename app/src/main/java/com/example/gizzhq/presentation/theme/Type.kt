@@ -1,4 +1,4 @@
-package com.example.gizzhq.ui.theme
+package com.example.gizzhq.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
