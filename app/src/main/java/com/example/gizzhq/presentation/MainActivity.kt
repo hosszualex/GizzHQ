@@ -1,20 +1,30 @@
 package com.example.gizzhq.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +35,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -38,37 +51,90 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var viewModel: MainViewModel
 
-    override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onPostCreate(savedInstanceState, persistentState)
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+        GizzHQTheme {
+            CreateNewsFeed {
+
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        intent?.data?.toString()?.let { uri ->
+            if (uri.contains("instagram.redirect.uri/auth")) {
+                // TODO
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             GizzHQTheme {
-                CreateNewsFeed()
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "news") {
+                    createNewsFeedGraph(this, navController = navController, this@MainActivity)
+                }
             }
         }
     }
 }
 
-@Composable
-fun CreateNewsFeed() {
-    LazyColumn(
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(2) { i ->
-            NewsFeedItem(itemCount = i)
+private fun createNewsFeedGraph(
+    navGraphBuilder: NavGraphBuilder,
+    navController: NavController,
+    context: MainActivity
+) {
+    navGraphBuilder.navigation(route = "news", startDestination = "newsFeedList") {
+
+        composable("newsFeedList") {
+            CreateNewsFeed {
+                navController.navigate("webview")
+            }
+        }
+        composable("webview") {
+            LoadWebUrl(
+                context = context,
+                url = "https://api.instagram.com/oauth/authorize?client_id=1753711138408921&redirect_uri=instagram.redirect.uri/auth&scope=user_profile,user_media&response_type=code"
+                //url = "https://github.com"
+            )
         }
     }
 }
+
+@Composable
+fun CreateNewsFeed(onNavigateToWebView: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        LazyColumn(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items(2) { i ->
+                NewsFeedItem(itemCount = i)
+            }
+        }
+
+        FloatingActionButton(
+            onClick = {
+                onNavigateToWebView()
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 20.dp, bottom = 10.dp),
+            shape = CircleShape
+        ) {
+            Icon(Icons.Filled.Add, "")
+        }
+    }
+}
+
 
 @Composable
 fun NewsFeedItem(itemCount: Int) {
@@ -85,10 +151,11 @@ fun NewsFeedItem(itemCount: Int) {
                 "https://upload.wikimedia.org/wikipedia/commons/4/42/King_Gizzard_2019.jpg",
             contentDescription = "King Gizz Image",
             contentScale = ContentScale.Crop,
+            placeholder = painterResource(R.drawable.news_feed_placeholder),
             modifier = Modifier
                 .padding(horizontal = 10.dp)
-                .clip(RoundedCornerShape(10.dp)),
-            placeholder = painterResource(R.drawable.news_feed_placeholder),
+                .heightIn(0.dp, 252.dp)
+                .clip(RoundedCornerShape(10.dp))
         )
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -108,30 +175,11 @@ fun NewsFeedItem(itemCount: Int) {
 }
 
 @Composable
-fun NavigationComponent() {
-    // Navigation Component
-    val navController = rememberNavController()
-    // A surface container using the 'background' color from the theme
-    NavHost(navController = navController, startDestination = "news") {
-        NewsFeedGraph(this)
-    }
-}
-
-private fun NewsFeedGraph(navGraphBuilder: NavGraphBuilder) {
-    navGraphBuilder.navigation(route = "news", startDestination = "newsFeedList") {
-        composable("newsFeedList") {
-            CreateNewsFeed()
+private fun LoadWebUrl(context: Context, url: String) {
+    AndroidView(factory = {
+        WebView(context).apply {
+            webViewClient = WebViewClient()
+            loadUrl(url)
         }
-        composable("newsFeedDetails") {
-
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    GizzHQTheme {
-        CreateNewsFeed()
-    }
+    })
 }
