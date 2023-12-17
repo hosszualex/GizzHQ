@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.gizzhq'
+    namespace 'com.ah.gizzhq'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.gizzhq"
+        applicationId "com.ah.gizzhq"
         minSdk 26
         targetSdk 34
         versionCode 1

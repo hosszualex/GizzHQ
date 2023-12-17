@@ -1,4 +1,4 @@
-package com.example.gizzhq.presentation.ui
+package com.ah.gizzhq.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,7 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.gizzhq.R
+import com.ah.gizzhq.R
 
 @Composable
 fun CreateNewsFeed(onNavigateToWebView: () -> Unit) {

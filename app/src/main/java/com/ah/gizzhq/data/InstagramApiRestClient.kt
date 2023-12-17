@@ -1,6 +1,6 @@
-package com.example.gizzhq.data
+package com.ah.gizzhq.data
 
-import com.example.gizzhq.domain.BaseResponse
+import com.ah.gizzhq.domain.BaseResponse
 import retrofit2.http.GET
 
 class InstagramApiRestClient {

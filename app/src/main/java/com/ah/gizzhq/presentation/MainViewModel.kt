@@ -1,9 +1,8 @@
-package com.example.gizzhq.presentation
+package com.ah.gizzhq.presentation
 
 import androidx.lifecycle.ViewModel
-import com.example.gizzhq.data.InstagramApiRestClient
-import com.example.gizzhq.data.InstagramPostsRepositoryImpl
-import com.example.gizzhq.data.Retrofit
+import com.ah.gizzhq.data.InstagramApiRestClient
+import com.ah.gizzhq.data.InstagramPostsRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

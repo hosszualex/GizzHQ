@@ -1,4 +1,4 @@
-package com.example.gizzhq.presentation
+package com.ah.gizzhq.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -16,9 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.example.gizzhq.presentation.theme.GizzHQTheme
-import com.example.gizzhq.presentation.ui.CreateNewsFeed
-import com.example.gizzhq.presentation.ui.ProfileScreen
+import com.ah.gizzhq.presentation.theme.GizzHQTheme
+import com.ah.gizzhq.presentation.ui.ProfileScreen
 
 class MainActivity : ComponentActivity() {
 

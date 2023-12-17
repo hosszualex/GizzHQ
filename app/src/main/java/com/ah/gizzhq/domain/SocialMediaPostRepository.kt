@@ -1,4 +1,4 @@
-package com.example.gizzhq.domain
+package com.ah.gizzhq.domain
 
 interface SocialMediaPostRepository {
     fun getPosts()

@@ -1,6 +1,6 @@
-package com.example.gizzhq.data
+package com.ah.gizzhq.data
 
-import com.example.gizzhq.domain.MediaPost
+import com.ah.gizzhq.domain.MediaPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

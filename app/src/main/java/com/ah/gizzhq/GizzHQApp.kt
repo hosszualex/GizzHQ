@@ -1,4 +1,4 @@
-package com.example.gizzhq
+package com.ah.gizzhq
 
 import android.app.Application
 

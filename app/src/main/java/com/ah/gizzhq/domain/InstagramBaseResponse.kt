@@ -1,4 +1,4 @@
-package com.example.gizzhq.domain
+package com.ah.gizzhq.domain
 
 import com.google.gson.annotations.SerializedName
 
