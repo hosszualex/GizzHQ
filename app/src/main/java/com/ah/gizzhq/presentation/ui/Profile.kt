@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.ah.gizzhq.R
+import com.ah.gizzhq.presentation.MainViewModel
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 
 
@@ -42,14 +43,14 @@ import com.ah.gizzhq.presentation.theme.GizzHQTheme
 @Composable
 fun ProfilePreview() {
     GizzHQTheme {
-        ProfileScreen()
+        ProfileScreen(MainViewModel())
     }
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(viewModel: MainViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,6 +79,9 @@ fun ProfileScreen() {
         }
 
         val sheetState = rememberModalBottomSheetState()
+
+        viewModel.firebaseStorage()
+
         if (isSheetOpen) {
             ModalBottomSheet(
                 sheetState = sheetState,

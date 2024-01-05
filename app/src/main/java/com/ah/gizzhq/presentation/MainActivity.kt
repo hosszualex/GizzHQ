@@ -21,13 +21,12 @@ import com.ah.gizzhq.presentation.ui.ProfileScreen
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var viewModel: MainViewModel
 
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
         GizzHQTheme {
-            ProfileScreen()
+            ProfileScreen(MainViewModel())
         }
     }
 
@@ -42,28 +41,36 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val mainViewModel = MainViewModel()
         setContent {
             GizzHQTheme {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "news") {
-                    createNewsFeedGraph(this, navController = navController, this@MainActivity)
+                    createNewsFeedGraph(
+                        this,
+                        navController = navController,
+                        this@MainActivity,
+                        mainViewModel
+                    )
                 }
             }
         }
     }
 }
 
+
 private fun createNewsFeedGraph(
     navGraphBuilder: NavGraphBuilder,
     navController: NavController,
-    context: MainActivity
+    context: MainActivity,
+    viewModel: MainViewModel
 ) {
     navGraphBuilder.navigation(route = "news", startDestination = "newsFeedList") {
         composable("newsFeedList") {
 /*            CreateNewsFeed {
                 navController.navigate("webview")
             }*/
-            ProfileScreen()
+            ProfileScreen(viewModel = viewModel)
         }
         composable("webview") {
             LoadWebUrl(
@@ -74,7 +81,6 @@ private fun createNewsFeedGraph(
         }
     }
 }
-
 
 
 @Composable
