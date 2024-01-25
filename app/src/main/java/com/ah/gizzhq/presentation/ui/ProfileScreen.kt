@@ -31,11 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.ah.gizzhq.R
-import com.ah.gizzhq.presentation.MainViewModel
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 
 
@@ -43,14 +43,14 @@ import com.ah.gizzhq.presentation.theme.GizzHQTheme
 @Composable
 fun ProfilePreview() {
     GizzHQTheme {
-        ProfileScreen(MainViewModel())
+        ProfileScreen()
     }
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: MainViewModel) {
+fun ProfileScreen(viewModel: ProfileViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +72,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ImageAvatar {
+            ImageAvatar(R.drawable.ic_profile) {
                 isSheetOpen = true
             }
             Text(text = "Change profile picture")
@@ -80,9 +80,16 @@ fun ProfileScreen(viewModel: MainViewModel) {
 
         val sheetState = rememberModalBottomSheetState()
 
-        viewModel.firebaseStorage()
+        //viewModel.firebaseStorage()
 
         if (isSheetOpen) {
+            val profileAvatars = listOf(
+                R.drawable.ic_profile,
+                R.drawable.avatar_1,
+                R.drawable.avatar_2,
+                R.drawable.avatar_3,
+                R.drawable.ic_add
+            )
             ModalBottomSheet(
                 sheetState = sheetState,
                 onDismissRequest = {
@@ -94,8 +101,8 @@ fun ProfileScreen(viewModel: MainViewModel) {
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(20) { item ->
-                        ImageAvatar {
+                    items(profileAvatars.size) { item ->
+                        ImageAvatar(avatar = profileAvatars[item]) {
                             // todo: on click, select this as new avatar
                         }
                     }
@@ -106,13 +113,10 @@ fun ProfileScreen(viewModel: MainViewModel) {
 }
 
 @Composable
-fun ImageAvatar(onAvatarClicked: (() -> Unit)? = null) {
-    val imageUri = rememberSaveable { mutableStateOf("") }
-    val painter = rememberAsyncImagePainter(
-        imageUri.value.ifBlank { R.drawable.ic_profile }
-    )
+fun ImageAvatar(avatar: Int, onAvatarClicked: (() -> Unit)? = null) {
     Image(
-        painter = painter, contentDescription = null, modifier = Modifier
+        painter = painterResource(id = avatar),
+        contentDescription = null, modifier = Modifier
             .size(120.dp)
             .clip(CircleShape)
             .border(
@@ -124,6 +128,6 @@ fun ImageAvatar(onAvatarClicked: (() -> Unit)? = null) {
                 onAvatarClicked?.invoke()
             },
         contentScale = ContentScale.Crop,
-        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondary)
+        colorFilter = if (avatar == R.drawable.ic_profile || avatar == R.drawable.ic_add) ColorFilter.tint(color = MaterialTheme.colorScheme.secondary) else null
     )
 }

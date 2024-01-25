@@ -7,6 +7,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -18,15 +19,18 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.ProfileScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val viewModel: MainViewModel by viewModels()
 
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
         GizzHQTheme {
-            ProfileScreen(MainViewModel())
+            ProfileScreen()
         }
     }
 
@@ -41,16 +45,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mainViewModel = MainViewModel()
         setContent {
             GizzHQTheme {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "news") {
-                    createNewsFeedGraph(
+                    createRegisterGraph(
                         this,
                         navController = navController,
                         this@MainActivity,
-                        mainViewModel
+                        viewModel
                     )
                 }
             }
@@ -59,7 +62,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
-private fun createNewsFeedGraph(
+private fun createRegisterGraph(
     navGraphBuilder: NavGraphBuilder,
     navController: NavController,
     context: MainActivity,
@@ -70,7 +73,7 @@ private fun createNewsFeedGraph(
 /*            CreateNewsFeed {
                 navController.navigate("webview")
             }*/
-            ProfileScreen(viewModel = viewModel)
+            ProfileScreen()
         }
         composable("webview") {
             LoadWebUrl(
