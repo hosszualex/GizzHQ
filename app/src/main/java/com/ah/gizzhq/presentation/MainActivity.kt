@@ -18,7 +18,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
+import com.ah.gizzhq.presentation.ui.CreateNewsFeed
 import com.ah.gizzhq.presentation.ui.ProfileScreen
+import com.ah.gizzhq.presentation.ui.register.RegisterScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,12 +50,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             GizzHQTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "news") {
-                    createRegisterGraph(
+                NavHost(navController = navController, startDestination = "accountCreation") {
+                    buildAccountCreationGraph(
                         this,
                         navController = navController,
-                        this@MainActivity,
-                        viewModel
+                        this@MainActivity
                     )
                 }
             }
@@ -62,18 +63,22 @@ class MainActivity : ComponentActivity() {
 }
 
 
-private fun createRegisterGraph(
+private fun buildAccountCreationGraph(
     navGraphBuilder: NavGraphBuilder,
     navController: NavController,
     context: MainActivity,
-    viewModel: MainViewModel
 ) {
-    navGraphBuilder.navigation(route = "news", startDestination = "newsFeedList") {
-        composable("newsFeedList") {
-/*            CreateNewsFeed {
-                navController.navigate("webview")
-            }*/
+    navGraphBuilder.navigation(route = "accountCreation", startDestination = "registerScreen") {
+        composable("registerScreen") {
+            RegisterScreen()
+        }
+        composable("profileScreen") {
             ProfileScreen()
+        }
+        composable("newsFeedListScreen") {
+            CreateNewsFeed {
+                navController.navigate("webview") // should go to a webview in theory
+            }
         }
         composable("webview") {
             LoadWebUrl(
