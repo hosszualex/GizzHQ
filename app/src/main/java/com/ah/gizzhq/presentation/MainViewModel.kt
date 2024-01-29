@@ -1,10 +1,6 @@
 package com.ah.gizzhq.presentation
 
 import androidx.lifecycle.ViewModel
-import com.ah.gizzhq.data.InstagramApiRestClient
-import com.ah.gizzhq.data.InstagramPostsRepositoryImpl
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,9 +18,6 @@ class MainViewModel @Inject constructor(): ViewModel() {
     private val _onGetAvatarImages = MutableStateFlow<List<String>>(listOf())
     val onGetAvatarImages = _onGetAvatarImages.asStateFlow()
 
-    private val repositoryImpl: InstagramPostsRepositoryImpl = InstagramPostsRepositoryImpl(
-        restClient = InstagramApiRestClient()
-    )
 
     fun firebaseStorage() {
     }

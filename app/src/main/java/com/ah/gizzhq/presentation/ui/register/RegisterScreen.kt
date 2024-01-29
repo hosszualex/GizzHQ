@@ -110,7 +110,7 @@ internal fun RegisterScreen(
         Button(
             onClick = {
                 keyboardController?.hide()
-                onEvent(RegisterUiEvent.Register("email", "password"))
+                onEvent(RegisterUiEvent.Register(email, password))
             },
             enabled = uiState.isRegisterButtonEnabled
         ) {

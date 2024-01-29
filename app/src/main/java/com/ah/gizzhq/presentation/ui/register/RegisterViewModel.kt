@@ -5,24 +5,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ah.gizzhq.domain.AuthenticationRepository
 import com.ah.gizzhq.domain.usecases.ValidatePasswordUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RegisterViewModel @Inject constructor(): ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository
+): ViewModel() {
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
 
-    var email by mutableStateOf("")
+    var email by mutableStateOf("dragana@asd.com") // todo: delete test values
         private set
 
-    var password by mutableStateOf("")
+    var password by mutableStateOf("predator1A") // todo: delete test values
         private set
 
-    var retypedPassword by mutableStateOf("")
+    var retypedPassword by mutableStateOf("predator1A") // todo: delete test values
         private set
 
 
@@ -38,7 +45,9 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
     }
 
     private fun register(email: String, password: String) {
-
+        viewModelScope.launch {
+            authenticationRepository.registerAccount(email, password)
+        }
     }
 
     private fun onEmailChanged(email: String) {
@@ -101,7 +110,7 @@ sealed interface RegisterUiEvent {
 
 data class RegisterUiState(
     val isLoading: Boolean = false,
-    val isRegisterButtonEnabled: Boolean = false,
+    val isRegisterButtonEnabled: Boolean = true, // todo: change it to false
     val isEmailValid: Boolean = true,
     val isPasswordValid: Boolean = true,
     val isRetypedPasswordValid: Boolean = true,
