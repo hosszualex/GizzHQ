@@ -19,7 +19,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import com.ah.gizzhq.R
-import com.ah.gizzhq.presentation.ui.register.RegisterUiEvent
 
 @Composable
 fun PasswordTextField(label: String, valuePassword: String, onValueChange: (String) -> Unit, isPasswordValid: Boolean) {

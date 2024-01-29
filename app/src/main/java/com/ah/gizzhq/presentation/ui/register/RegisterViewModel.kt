@@ -1,5 +1,6 @@
 package com.ah.gizzhq.presentation.ui.register
 
+import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -42,10 +43,10 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
 
     private fun onEmailChanged(email: String) {
         this.email = email
-        val updatedIsEmailValid = email.contains("@")
+        val updatedIsEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
         _uiState.update {
             it.copy(
-                isEmailValid = updatedIsEmailValid, // todo: create email validity code
+                isEmailValid = updatedIsEmailValid,
                 isRegisterButtonEnabled = updatedIsEmailValid
                         && it.isPasswordValid
                         && it.isRetypedPasswordValid
@@ -62,7 +63,9 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
         _uiState.update {
             it.copy(
                 isPasswordValid = updatedIsPasswordValid,
-                isRegisterButtonEnabled = updatedIsPasswordValid && it.isEmailValid && it.isRetypedPasswordValid
+                isRegisterButtonEnabled = updatedIsPasswordValid
+                        && it.isEmailValid
+                        && it.isRetypedPasswordValid
                         && email.isNotEmpty()
                         && password.isNotEmpty()
                         && retypedPassword.isNotEmpty()
@@ -76,7 +79,9 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
         _uiState.update {
             it.copy(
                 isRetypedPasswordValid = updatedIsRetypedPasswordValid, // vefifies if they are the same
-                isRegisterButtonEnabled = updatedIsRetypedPasswordValid && it.isEmailValid && it.isPasswordValid
+                isRegisterButtonEnabled = updatedIsRetypedPasswordValid
+                        && it.isEmailValid
+                        && it.isPasswordValid
                         && email.isNotEmpty()
                         && password.isNotEmpty()
                         && retypedPassword.isNotEmpty()
