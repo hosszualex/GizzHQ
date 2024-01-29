@@ -20,6 +20,7 @@ import androidx.navigation.navigation
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.CreateNewsFeed
 import com.ah.gizzhq.presentation.ui.ProfileScreen
+import com.ah.gizzhq.presentation.ui.register.RegisterRoute
 import com.ah.gizzhq.presentation.ui.register.RegisterScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,7 +71,7 @@ private fun buildAccountCreationGraph(
 ) {
     navGraphBuilder.navigation(route = "accountCreation", startDestination = "registerScreen") {
         composable("registerScreen") {
-            RegisterScreen()
+            RegisterRoute()
         }
         composable("profileScreen") {
             ProfileScreen()
