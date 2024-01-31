@@ -7,12 +7,14 @@ import io.appwrite.models.*
 import io.appwrite.services.*
 import javax.inject.Inject
 
-class AppwriteService @Inject constructor(): Appwrite {
-    private lateinit var client: Client
-    private lateinit var account: Account
+class AppwriteService @Inject constructor(
+    private val context: Context
+): Appwrite {
+    private val account: Account
 
-    override fun init(context: Context) {
-        client = Client(context)
+
+    init { // todo: need context from the DI module
+        val client = Client(context)
             .setEndpoint("https://cloud.appwrite.io/v1")
             .setProject("65b7ba629b1fd5538239")
 
