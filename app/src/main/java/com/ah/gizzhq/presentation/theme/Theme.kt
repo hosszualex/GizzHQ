@@ -1,4 +1,4 @@
-package com.example.gizzhq.presentation.theme
+package com.ah.gizzhq.presentation.theme
 
 import android.app.Activity
 import android.os.Build

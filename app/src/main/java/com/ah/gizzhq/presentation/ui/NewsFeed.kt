@@ -1,18 +1,9 @@
-package com.example.gizzhq.presentation
+package com.ah.gizzhq.presentation.ui
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.os.PersistableBundle
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -33,77 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import coil.compose.AsyncImage
-import com.example.gizzhq.R
-import com.example.gizzhq.presentation.theme.GizzHQTheme
-
-class MainActivity : ComponentActivity() {
-
-    private lateinit var viewModel: MainViewModel
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        GizzHQTheme {
-            CreateNewsFeed {
-
-            }
-        }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.data?.toString()?.let { uri ->
-            if (uri.contains("instagram.redirect.uri/auth")) {
-                // TODO
-            }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            GizzHQTheme {
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "news") {
-                    createNewsFeedGraph(this, navController = navController, this@MainActivity)
-                }
-            }
-        }
-    }
-}
-
-private fun createNewsFeedGraph(
-    navGraphBuilder: NavGraphBuilder,
-    navController: NavController,
-    context: MainActivity
-) {
-    navGraphBuilder.navigation(route = "news", startDestination = "newsFeedList") {
-
-        composable("newsFeedList") {
-            CreateNewsFeed {
-                navController.navigate("webview")
-            }
-        }
-        composable("webview") {
-            LoadWebUrl(
-                context = context,
-                url = "https://api.instagram.com/oauth/authorize?client_id=1753711138408921&redirect_uri=instagram.redirect.uri/auth&scope=user_profile,user_media&response_type=code"
-                //url = "https://github.com"
-            )
-        }
-    }
-}
+import com.ah.gizzhq.R
 
 @Composable
 fun CreateNewsFeed(onNavigateToWebView: () -> Unit) {
@@ -137,7 +60,7 @@ fun CreateNewsFeed(onNavigateToWebView: () -> Unit) {
 
 
 @Composable
-fun NewsFeedItem(itemCount: Int) {
+private fun NewsFeedItem(itemCount: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
@@ -172,14 +95,4 @@ fun NewsFeedItem(itemCount: Int) {
             }
         }
     }
-}
-
-@Composable
-private fun LoadWebUrl(context: Context, url: String) {
-    AndroidView(factory = {
-        WebView(context).apply {
-            webViewClient = WebViewClient()
-            loadUrl(url)
-        }
-    })
 }
