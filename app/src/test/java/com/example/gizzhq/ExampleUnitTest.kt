@@ -1,4 +1,4 @@
-package com.ah.gizzhq
+package com.example.gizzhq
 
 import org.junit.Test
 

@@ -6,7 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ah.gizzhq.domain.AuthenticationRepository
+import com.ah.gizzhq.domain.responses.RegisterResponse
+import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidatePasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val validatePasswordUseCase: ValidatePasswordUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
@@ -46,7 +48,22 @@ class RegisterViewModel @Inject constructor(
 
     private fun register(email: String, password: String) {
         viewModelScope.launch {
-            authenticationRepository.registerAccount(email, password)
+            var isLoading = true
+            registerUserUseCase(email,password).let { result ->
+                when (result) {
+                    is RegisterResponse.OnSuccess -> {
+                        val updatedUI = true
+                    }
+                    is RegisterResponse.OnErrorGeneric -> {
+                        val dsa = result.errorKey
+                    }
+                    else -> {
+                        val otherErrors = true
+                    }
+                }
+            }.also {
+                isLoading = false
+            }
         }
     }
 
@@ -68,7 +85,7 @@ class RegisterViewModel @Inject constructor(
 
     private fun onPasswordChanged(password: String) {
         this.password = password
-        val updatedIsPasswordValid = ValidatePasswordUseCase.validatePassword(password)
+        val updatedIsPasswordValid = validatePasswordUseCase(password)
         _uiState.update {
             it.copy(
                 isPasswordValid = updatedIsPasswordValid,

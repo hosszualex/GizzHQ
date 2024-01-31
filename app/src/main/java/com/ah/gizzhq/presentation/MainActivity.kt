@@ -17,13 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.ah.gizzhq.domain.MockAuthenticationRepositoryImpl
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.CreateNewsFeed
 import com.ah.gizzhq.presentation.ui.ProfileScreen
 import com.ah.gizzhq.presentation.ui.register.RegisterRoute
-import com.ah.gizzhq.presentation.ui.register.RegisterScreen
-import com.ah.gizzhq.presentation.ui.register.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

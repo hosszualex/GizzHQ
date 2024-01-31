@@ -1,7 +1,7 @@
-package com.ah.gizzhq.data.di
+package com.ah.gizzhq.domain.di
 
-import com.ah.gizzhq.domain.AppwriteAuthenticationRepositoryImpl
-import com.ah.gizzhq.domain.AuthenticationRepository
+import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
+import com.ah.gizzhq.data.repositories.AuthenticationRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,6 @@ interface DataModule {
     fun bindsAuthenticationRepositoryRepository(
         userDataRepository: AppwriteAuthenticationRepositoryImpl,
     ): AuthenticationRepository
+
 
 }
