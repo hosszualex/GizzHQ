@@ -1,6 +1,6 @@
 package com.ah.gizzhq.data.repositories
 
-import com.ah.gizzhq.data.Appwrite
+import com.ah.gizzhq.data.services.Appwrite
 import com.ah.gizzhq.domain.responses.RegisterResponse
 import javax.inject.Inject
 

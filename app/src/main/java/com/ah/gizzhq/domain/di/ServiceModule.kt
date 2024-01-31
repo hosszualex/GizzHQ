@@ -1,8 +1,8 @@
 package com.ah.gizzhq.domain.di
 
 import android.content.Context
-import com.ah.gizzhq.data.Appwrite
-import com.ah.gizzhq.data.AppwriteService
+import com.ah.gizzhq.data.services.Appwrite
+import com.ah.gizzhq.data.services.AppwriteService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

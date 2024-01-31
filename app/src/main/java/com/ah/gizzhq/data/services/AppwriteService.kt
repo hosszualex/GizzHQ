@@ -1,4 +1,4 @@
-package com.ah.gizzhq.data
+package com.ah.gizzhq.data.services
 
 import android.content.Context
 import io.appwrite.Client
@@ -12,6 +12,9 @@ class AppwriteService @Inject constructor(
 ): Appwrite {
     private val account: Account
 
+    companion object {
+        const val CURRENT_SESSION = "current"
+    }
 
     init { // todo: need context from the DI module
         val client = Client(context)
@@ -25,10 +28,7 @@ class AppwriteService @Inject constructor(
         email: String,
         password: String,
     ): Session {
-        return account.createEmailSession(
-            email,
-            password,
-        )
+        return account.createEmailSession(email = email, password = password)
     }
 
     override suspend fun onRegister(
@@ -37,12 +37,12 @@ class AppwriteService @Inject constructor(
     ): User<Map<String, Any>> {
         return account.create(
             userId = ID.unique(),
-            email,
-            password,
+            email = email,
+            password = password,
         )
     }
 
     override suspend fun onLogout() {
-        account.deleteSession("current")
+        account.deleteSession(CURRENT_SESSION)
     }
 }
