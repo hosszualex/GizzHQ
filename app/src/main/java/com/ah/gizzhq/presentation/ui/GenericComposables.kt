@@ -23,7 +23,6 @@ import com.ah.gizzhq.R
 @Composable
 fun PasswordTextField(label: String, valuePassword: String, onValueChange: (String) -> Unit, isPasswordValid: Boolean) {
     var isVisible by remember { mutableStateOf(false) }
-
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = valuePassword,

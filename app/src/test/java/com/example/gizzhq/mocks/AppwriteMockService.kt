@@ -1,6 +1,7 @@
-package com.example.gizzhq
+package com.example.gizzhq.mocks
 
 import com.ah.gizzhq.data.services.Appwrite
+import io.appwrite.exceptions.AppwriteException
 import io.appwrite.models.Preferences
 import io.appwrite.models.Session
 import io.appwrite.models.User
@@ -37,8 +38,15 @@ class AppwriteMockService: Appwrite {
     }
 
     override suspend fun onRegister(email: String, password: String): User<Map<String, Any>> {
-        //TODO("Not yet implemented")
-        val preferences = HashMap<String, String>(5)
+        val preferences = HashMap<String, String>(0)
+        // todo: need to diferentiate Appwrite Exceptions vs SocketTimeoutExceptions or others t is UnknownHostException || t is SocketTimeoutException || t is ConnectException
+        when (email) {
+            "user@exists.com" -> throw AppwriteException(code = 409, type = "user_already_exists")
+            "user@ratelimit.com" -> throw AppwriteException(code = 429, type = "general_rate_limit_exceeded")
+            else -> Unit
+        }
+        if (email == "user@exists.com")
+            throw AppwriteException()
         return User.invoke(
             id = "asd",
             createdAt = "",

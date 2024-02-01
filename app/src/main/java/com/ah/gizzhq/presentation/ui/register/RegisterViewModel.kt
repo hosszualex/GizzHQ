@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ah.gizzhq.domain.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
+import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
 import com.ah.gizzhq.domain.usecases.ValidatePasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
-    private val validatePasswordUseCase: ValidatePasswordUseCase
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val validateEmailUseCase: ValidateEmailUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
@@ -69,7 +71,7 @@ class RegisterViewModel @Inject constructor(
 
     private fun onEmailChanged(email: String) {
         this.email = email
-        val updatedIsEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        val updatedIsEmailValid = validateEmailUseCase(email)
         _uiState.update {
             it.copy(
                 isEmailValid = updatedIsEmailValid,

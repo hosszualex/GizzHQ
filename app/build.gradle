@@ -90,6 +90,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation "com.google.dagger:hilt-android-testing:2.48"
     kaptTest "com.google.dagger:hilt-android-compiler:2.48"
+    testImplementation "androidx.test:core-ktx:1.5.0"
+    testImplementation "org.mockito:mockito-core:4.8.0"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
 
     //=================INSTRUMENTED TEST COMPONENTS===============//
     androidTestImplementation "com.google.dagger:hilt-android-testing:2.48"
