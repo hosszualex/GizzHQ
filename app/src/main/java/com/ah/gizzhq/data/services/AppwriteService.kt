@@ -21,6 +21,7 @@ class AppwriteService @Inject constructor(
             .setEndpoint("https://cloud.appwrite.io/v1")
             .setProject("65b7ba629b1fd5538239")
 
+
         account = Account(client)
     }
 

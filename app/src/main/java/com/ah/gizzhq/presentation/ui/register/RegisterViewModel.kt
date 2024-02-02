@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ah.gizzhq.GizzHQApp
+import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
+import com.ah.gizzhq.data.services.AppwriteService
 import com.ah.gizzhq.domain.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
@@ -58,6 +61,15 @@ class RegisterViewModel @Inject constructor(
                     }
                     is RegisterResponse.OnErrorGeneric -> {
                         val dsa = result.errorKey
+                    }
+                    is RegisterResponse.OnErrorUserAlreadyExists -> {
+
+                    }
+                    is RegisterResponse.OnErrorTimeout -> {
+
+                    }
+                    is RegisterResponse.OnErrorNoInternet -> {
+
                     }
                     else -> {
                         val otherErrors = true

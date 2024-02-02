@@ -5,6 +5,9 @@ import io.appwrite.exceptions.AppwriteException
 import io.appwrite.models.Preferences
 import io.appwrite.models.Session
 import io.appwrite.models.User
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class AppwriteMockService: Appwrite {
     override suspend fun onLogin(email: String, password: String): Session {
@@ -43,10 +46,11 @@ class AppwriteMockService: Appwrite {
         when (email) {
             "user@exists.com" -> throw AppwriteException(code = 409, type = "user_already_exists")
             "user@ratelimit.com" -> throw AppwriteException(code = 429, type = "general_rate_limit_exceeded")
+            "user@sockettimedout.com" -> throw SocketTimeoutException()
+            "user@unknownhost.com" -> throw UnknownHostException()
+            "user@conectionfailed.com" -> throw ConnectException()
             else -> Unit
         }
-        if (email == "user@exists.com")
-            throw AppwriteException()
         return User.invoke(
             id = "asd",
             createdAt = "",

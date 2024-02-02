@@ -1,37 +1,31 @@
-package com.example.gizzhq.repositories
+package com.example.gizzhq.usecases
 
 import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
 import com.ah.gizzhq.data.repositories.AuthenticationRepository
 import com.ah.gizzhq.domain.responses.RegisterResponse
+import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.example.gizzhq.mocks.AppwriteMockService
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert
 import org.junit.Before
+import org.junit.Test
+import javax.inject.Inject
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class AppwriteAuthetnicationRepositoryTest {
-
-    private lateinit var mockAppwriteAuthenticationRepository: AuthenticationRepository
+class RegisterUserUseCaseTest {
+    
+    private lateinit var registerUserUseCase: RegisterUserUseCase
 
     @Before
     fun setup(){
-        mockAppwriteAuthenticationRepository =
-            AppwriteAuthenticationRepositoryImpl(AppwriteMockService())
+        registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService()))
     }
-
     @Test
     fun `Register is successful`() {
         runTest {
-            mockAppwriteAuthenticationRepository.registerAccount(
+            registerUserUseCase(
                 "newuser@email.com", "beautifulPassw0rd"
             ).let { response ->
-              assertEquals(RegisterResponse.OnSuccess, response)
+                Assert.assertEquals(RegisterResponse.OnSuccess, response)
             }
         }
     }
@@ -39,10 +33,10 @@ class AppwriteAuthetnicationRepositoryTest {
     @Test
     fun `Register has failed, user already exists`() {
         runTest {
-            mockAppwriteAuthenticationRepository.registerAccount(
+            registerUserUseCase(
                 "user@exists.com", "beautifulPassw0rd"
             ).let { response ->
-                assertEquals(RegisterResponse.OnErrorUserAlreadyExists, response)
+                Assert.assertEquals(RegisterResponse.OnErrorUserAlreadyExists, response)
             }
         }
     }
@@ -50,10 +44,10 @@ class AppwriteAuthetnicationRepositoryTest {
     @Test
     fun `Register has failed, socket has timed out`() {
         runTest {
-            mockAppwriteAuthenticationRepository.registerAccount(
+            registerUserUseCase(
                 "user@sockettimedout.com", "beautifulPassw0rd"
             ).let { response ->
-                assertEquals(RegisterResponse.OnErrorNoInternet, response)
+                Assert.assertEquals(RegisterResponse.OnErrorNoInternet, response)
             }
         }
     }
@@ -61,10 +55,10 @@ class AppwriteAuthetnicationRepositoryTest {
     @Test
     fun `Register has failed, unknown host`() {
         runTest {
-            mockAppwriteAuthenticationRepository.registerAccount(
+            registerUserUseCase(
                 "user@unknownhost.com", "beautifulPassw0rd"
             ).let { response ->
-                assertEquals(RegisterResponse.OnErrorNoInternet, response)
+                Assert.assertEquals(RegisterResponse.OnErrorNoInternet, response)
             }
         }
     }
@@ -72,10 +66,10 @@ class AppwriteAuthetnicationRepositoryTest {
     @Test
     fun `Register has failed, connection failed`() {
         runTest {
-            mockAppwriteAuthenticationRepository.registerAccount(
+            registerUserUseCase(
                 "user@conectionfailed.com", "beautifulPassw0rd"
             ).let { response ->
-                assertEquals(RegisterResponse.OnErrorNoInternet, response)
+                Assert.assertEquals(RegisterResponse.OnErrorNoInternet, response)
             }
         }
     }
@@ -83,13 +77,15 @@ class AppwriteAuthetnicationRepositoryTest {
     @Test
     fun `Register has failed, rate limit reached`() {
         runTest {
-            mockAppwriteAuthenticationRepository.registerAccount(
+            registerUserUseCase(
                 "user@ratelimit.com", "beautifulPassw0rd"
             ).let { response ->
-                assertEquals(RegisterResponse.OnErrorGeneric(
-                    errorCode = 429,
-                    errorKey = "general_rate_limit_exceeded"
-                ), response)
+                Assert.assertEquals(
+                    RegisterResponse.OnErrorGeneric(
+                        errorCode = 429,
+                        errorKey = "general_rate_limit_exceeded"
+                    ), response
+                )
             }
         }
     }
