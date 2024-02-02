@@ -49,7 +49,7 @@ android {
         }
     }
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests.returnDefaultValues = true // uninitialized methods/variables instead return either null or zero, depending on the return type when testing
         unitTests.includeAndroidResources = true
     }
 }

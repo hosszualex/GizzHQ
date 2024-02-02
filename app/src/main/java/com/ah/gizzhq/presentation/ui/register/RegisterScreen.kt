@@ -1,5 +1,8 @@
 package com.ah.gizzhq.presentation.ui.register
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +28,7 @@ import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.EmailTextField
 import com.ah.gizzhq.presentation.ui.ErrorText
 import com.ah.gizzhq.presentation.ui.PasswordTextField
+import com.ah.gizzhq.presentation.ui.ProgressIndicator
 
 @Composable
 fun RegisterRoute(
@@ -116,6 +120,14 @@ internal fun RegisterScreen(
         ) {
             Text(text = "Register Account")
         }
+    }
+
+    AnimatedVisibility(
+        visible = uiState.isLoading,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        ProgressIndicator()
     }
 }
 

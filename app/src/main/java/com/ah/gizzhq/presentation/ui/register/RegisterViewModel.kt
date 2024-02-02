@@ -46,14 +46,12 @@ class RegisterViewModel @Inject constructor(
 
     private fun register(email: String, password: String) {
         viewModelScope.launch {
-            var isLoading = true
+            _uiState.update { it.copy(isLoading = true) }
             registerUserUseCase(email,password).let { result ->
                 when (result) {
                     is RegisterResponse.OnSuccess -> {
-                        val updatedUI = true
                     }
                     is RegisterResponse.OnErrorGeneric -> {
-                        val dsa = result.errorKey
                     }
                     is RegisterResponse.OnErrorUserAlreadyExists -> {
 
@@ -65,11 +63,10 @@ class RegisterViewModel @Inject constructor(
 
                     }
                     else -> {
-                        val otherErrors = true
                     }
                 }
             }.also {
-                isLoading = false
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
