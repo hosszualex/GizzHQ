@@ -1,14 +1,10 @@
 package com.ah.gizzhq.presentation.ui.register
 
-import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ah.gizzhq.GizzHQApp
-import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
-import com.ah.gizzhq.data.services.AppwriteService
 import com.ah.gizzhq.domain.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
@@ -27,18 +23,15 @@ class RegisterViewModel @Inject constructor(
     private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase
 ): ViewModel() {
+
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
-
     var email by mutableStateOf("dragana@asd.com") // todo: delete test values
         private set
-
     var password by mutableStateOf("predator1A") // todo: delete test values
         private set
-
     var retypedPassword by mutableStateOf("predator1A") // todo: delete test values
         private set
-
 
     fun onEvent(event: RegisterUiEvent) {
         when (event) {
