@@ -1,4 +1,4 @@
-package com.ah.gizzhq.domain.responses
+package com.ah.gizzhq.domain.models.responses
 
 sealed class BaseResponse {
     data class OnSuccess(val data: Any): BaseResponse()

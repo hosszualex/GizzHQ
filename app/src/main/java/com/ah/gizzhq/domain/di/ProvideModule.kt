@@ -3,6 +3,7 @@ package com.ah.gizzhq.domain.di
 import android.content.Context
 import com.ah.gizzhq.data.services.Appwrite
 import com.ah.gizzhq.data.services.AppwriteService
+import com.ah.gizzhq.domain.utils.AppPreferencesDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,10 +13,16 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ServiceModule {
+object ProvideModule {
     @Provides
     @Singleton
     fun providesAppwriteServies(
         @ApplicationContext context: Context,
     ): Appwrite = AppwriteService(context)
+
+    @Provides
+    @Singleton
+    fun providesAppPreferencesDataStore(
+        @ApplicationContext context: Context
+    ): AppPreferencesDataSource = AppPreferencesDataSource(context)
 }

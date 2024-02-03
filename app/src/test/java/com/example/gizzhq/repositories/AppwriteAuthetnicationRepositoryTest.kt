@@ -2,7 +2,7 @@ package com.example.gizzhq.repositories
 
 import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
 import com.ah.gizzhq.data.repositories.AuthenticationRepository
-import com.ah.gizzhq.domain.responses.RegisterResponse
+import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import com.example.gizzhq.mocks.AppwriteMockService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -86,7 +86,8 @@ class AppwriteAuthetnicationRepositoryTest {
             mockAppwriteAuthenticationRepository.registerAccount(
                 "user@ratelimit.com", "beautifulPassw0rd"
             ).let { response ->
-                assertEquals(RegisterResponse.OnErrorGeneric(
+                assertEquals(
+                    RegisterResponse.OnErrorGeneric(
                     errorCode = 429,
                     errorKey = "general_rate_limit_exceeded"
                 ), response)

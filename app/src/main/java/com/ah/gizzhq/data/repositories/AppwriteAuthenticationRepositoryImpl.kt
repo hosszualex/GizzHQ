@@ -1,16 +1,21 @@
 package com.ah.gizzhq.data.repositories
 
 import com.ah.gizzhq.data.services.Appwrite
-import com.ah.gizzhq.domain.responses.RegisterResponse
+import com.ah.gizzhq.domain.models.UserData
+import com.ah.gizzhq.domain.models.responses.RegisterResponse
+import com.ah.gizzhq.domain.utils.AppPreferencesDataSource
 import io.appwrite.exceptions.AppwriteException
+import kotlinx.coroutines.flow.Flow
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
 class AppwriteAuthenticationRepositoryImpl @Inject constructor(
-    private val appwrite: Appwrite
+    private val appwrite: Appwrite,
+    private val preferencesDataSource: AppPreferencesDataSource
 ) : AuthenticationRepository {
+
     override suspend fun login(email: String, password: String): RegisterResponse {
         appwrite.onLogin(email, password)
         return RegisterResponse.OnSuccess
@@ -20,6 +25,7 @@ class AppwriteAuthenticationRepositoryImpl @Inject constructor(
         runCatching {
             appwrite.onRegister(email, password)
         }.onSuccess {
+            preferencesDataSource.setEmail(email)
             return RegisterResponse.OnSuccess
         }.onFailure { throwable ->
             return handleRegisterError(throwable)

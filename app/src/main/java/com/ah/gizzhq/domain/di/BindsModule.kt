@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface DataModule {
+interface BindsModule {
     @Binds
     fun bindsAuthenticationRepositoryRepository(
         userDataRepository: AppwriteAuthenticationRepositoryImpl,

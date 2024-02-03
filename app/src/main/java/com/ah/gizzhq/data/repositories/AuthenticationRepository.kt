@@ -1,6 +1,6 @@
 package com.ah.gizzhq.data.repositories
 
-import com.ah.gizzhq.domain.responses.RegisterResponse
+import com.ah.gizzhq.domain.models.responses.RegisterResponse
 
 interface AuthenticationRepository {
 

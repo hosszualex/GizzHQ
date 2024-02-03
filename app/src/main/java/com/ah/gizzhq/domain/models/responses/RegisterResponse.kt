@@ -1,4 +1,4 @@
-package com.ah.gizzhq.domain.responses
+package com.ah.gizzhq.domain.models.responses
 
 sealed class RegisterResponse {
     data object OnSuccess: RegisterResponse()
