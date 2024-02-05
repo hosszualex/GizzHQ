@@ -1,7 +1,6 @@
 package com.ah.gizzhq.presentation
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -9,8 +8,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -22,6 +29,10 @@ import com.ah.gizzhq.presentation.ui.CreateNewsFeed
 import com.ah.gizzhq.presentation.ui.ProfileScreen
 import com.ah.gizzhq.presentation.ui.register.RegisterRoute
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,23 +47,43 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.data?.toString()?.let { uri ->
-            if (uri.contains("instagram.redirect.uri/auth")) {
-                // TODO
-            }
-        }
-    }
+//    override fun onNewIntent(intent: Intent?) {
+//        super.onNewIntent(intent)
+//        intent?.data?.toString()?.let { uri ->
+//            if (uri.contains("instagram.redirect.uri/auth")) {
+//                // TODO
+//            }
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var userAuth: UserAuthState by mutableStateOf(UserAuthState())
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userAuthState
+                    .onEach {
+                        userAuth = it
+                    }
+                    .collect()
+            }
+        }
+
         setContent {
             GizzHQTheme {
+
                 val navController = rememberNavController()
-//                var testViewModel = RegisterViewModel(
-//                    MockAuthenticationRepositoryImpl()
-//                )
+                LaunchedEffect(userAuth.isRegistered) {
+                    val route = if (userAuth.isRegistered) {
+                        "profileScreen"
+                    } else {
+                        "registerScreen"
+                    }
+
+                    navController.navigate(route) { popUpTo(0) }
+                }
+
                 NavHost(navController = navController, startDestination = "accountCreation") {
                     buildAccountCreationGraph(
                         this,

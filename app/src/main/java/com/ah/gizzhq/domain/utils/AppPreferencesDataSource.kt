@@ -28,6 +28,12 @@ class AppPreferencesDataSource @Inject constructor(
         }
     }
 
+    suspend fun clearUserSession() {
+        dataStore.edit { preferences ->
+            preferences.remove(emailKey)
+        }
+    }
+
     companion object {
         private const val EMAIL = "email"
         private val emailKey = stringPreferencesKey(EMAIL)

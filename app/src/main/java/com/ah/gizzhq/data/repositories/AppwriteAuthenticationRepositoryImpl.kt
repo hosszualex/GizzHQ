@@ -17,8 +17,16 @@ class AppwriteAuthenticationRepositoryImpl @Inject constructor(
 ) : AuthenticationRepository {
 
     override suspend fun login(email: String, password: String): RegisterResponse {
-        appwrite.onLogin(email, password)
-        return RegisterResponse.OnSuccess
+        runCatching {
+            appwrite.onLogin(email, password)
+        }.onSuccess {
+            return RegisterResponse.OnSuccess
+        }.onFailure { throwable ->
+            return handleRegisterError(throwable)
+        }
+            .also { // this is the default use case for return
+                return RegisterResponse.OnErrorGeneric()
+            }
     }
 
     override suspend fun registerAccount(email: String, password: String): RegisterResponse {
@@ -35,8 +43,14 @@ class AppwriteAuthenticationRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun logout() {
-        //Appwrite.onLogout()
+    override suspend fun logout() { // wip
+        runCatching {
+            appwrite.onLogout()
+        }.onSuccess {
+            preferencesDataSource.clearUserSession()
+        }.onFailure {
+
+        }
     }
 
     private fun handleRegisterError(exception: Throwable): RegisterResponse {

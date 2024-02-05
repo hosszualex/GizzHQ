@@ -5,14 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ah.gizzhq.data.repositories.UserDataRepositoryImpl
+import com.ah.gizzhq.domain.models.UserData
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
 import com.ah.gizzhq.domain.usecases.ValidatePasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +26,8 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
-    private val validateEmailUseCase: ValidateEmailUseCase
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val userDataRepository: UserDataRepositoryImpl
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState())
@@ -38,15 +44,16 @@ class RegisterViewModel @Inject constructor(
             is RegisterUiEvent.EmailChanged -> onEmailChanged(event.email)
             is RegisterUiEvent.PasswordChanged -> onPasswordChanged(event.password)
             is RegisterUiEvent.RetypedPasswordChanged -> onRetypedPasswordChanged(event.retypedPassword)
-            is RegisterUiEvent.Register -> register(event.email, event.password)
+            is RegisterUiEvent.Register -> registerUser(event.email, event.password)
             //is RegisterUiEvent.Error -> onError()
             else -> Unit
         }
     }
 
-    private fun register(email: String, password: String) {
+    private fun registerUser(email: String, password: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
+
             registerUserUseCase(email,password).let { result ->
                 when (result) {
                     is RegisterResponse.OnSuccess -> {
@@ -54,15 +61,10 @@ class RegisterViewModel @Inject constructor(
                     is RegisterResponse.OnErrorGeneric -> {
                     }
                     is RegisterResponse.OnErrorUserAlreadyExists -> {
-
                     }
                     is RegisterResponse.OnErrorTimeout -> {
-
                     }
                     is RegisterResponse.OnErrorNoInternet -> {
-
-                    }
-                    else -> {
                     }
                 }
             }.also {
