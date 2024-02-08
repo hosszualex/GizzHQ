@@ -24,13 +24,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
-                <data android:scheme="instagram.redirect.uri/auth" />
-
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
+<!--                DEEP LINKS                          -->
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
         <activity android:name="io.appwrite.views.CallbackActivity" android:exported="true">

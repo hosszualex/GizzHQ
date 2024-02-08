@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,10 +25,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.CreateNewsFeed
-import com.ah.gizzhq.presentation.ui.ProfileScreen
+import com.ah.gizzhq.presentation.ui.profile.ProfileScreen
 import com.ah.gizzhq.presentation.ui.register.RegisterRoute
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -46,15 +44,6 @@ class MainActivity : ComponentActivity() {
             ProfileScreen()
         }
     }
-
-//    override fun onNewIntent(intent: Intent?) {
-//        super.onNewIntent(intent)
-//        intent?.data?.toString()?.let { uri ->
-//            if (uri.contains("instagram.redirect.uri/auth")) {
-//                // TODO
-//            }
-//        }
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +72,9 @@ class MainActivity : ComponentActivity() {
 
                     navController.navigate(route) { popUpTo(0) }
                 }
+
+                // todo: add loading bar in the Main Activity
+                // todo: add error popup in the Main Activity
 
                 NavHost(navController = navController, startDestination = "accountCreation") {
                     buildAccountCreationGraph(

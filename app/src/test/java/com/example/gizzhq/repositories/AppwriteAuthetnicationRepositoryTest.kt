@@ -1,14 +1,18 @@
 package com.example.gizzhq.repositories
 
+import android.content.Context
+import com.ah.gizzhq.data.AppPreferencesDataSource
 import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
 import com.ah.gizzhq.data.repositories.AuthenticationRepository
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
+import com.example.gizzhq.mocks.AppPreferencesMock
 import com.example.gizzhq.mocks.AppwriteMockService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Before
+import org.mockito.Mock
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -22,7 +26,7 @@ class AppwriteAuthetnicationRepositoryTest {
     @Before
     fun setup(){
         mockAppwriteAuthenticationRepository =
-            AppwriteAuthenticationRepositoryImpl(AppwriteMockService())
+            AppwriteAuthenticationRepositoryImpl(AppwriteMockService(), AppPreferencesMock())
     }
 
     @Test

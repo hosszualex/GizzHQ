@@ -1,23 +1,28 @@
 package com.example.gizzhq.usecases
 
+import android.content.Context
+import com.ah.gizzhq.data.AppPreferencesDataSource
 import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
 import com.ah.gizzhq.data.repositories.AuthenticationRepository
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
+import com.example.gizzhq.mocks.AppPreferencesMock
 import com.example.gizzhq.mocks.AppwriteMockService
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
 import javax.inject.Inject
 
 class RegisterUserUseCaseTest {
     
     private lateinit var registerUserUseCase: RegisterUserUseCase
-
+    @Mock
+    private lateinit var mockContext: Context
     @Before
     fun setup(){
-        registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService()))
+        registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService(), AppPreferencesMock()))
     }
     @Test
     fun `Register is successful`() {

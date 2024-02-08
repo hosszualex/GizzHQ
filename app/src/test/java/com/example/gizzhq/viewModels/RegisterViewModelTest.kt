@@ -2,11 +2,13 @@ package com.example.gizzhq.viewModels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
+import com.ah.gizzhq.data.repositories.UserDataRepositoryImpl
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
 import com.ah.gizzhq.domain.usecases.ValidatePasswordUseCase
 import com.ah.gizzhq.presentation.ui.register.RegisterUiEvent
 import com.ah.gizzhq.presentation.ui.register.RegisterViewModel
+import com.example.gizzhq.mocks.AppPreferencesMock
 import com.example.gizzhq.mocks.AppwriteMockService
 import org.junit.Assert
 import org.junit.Before
@@ -20,10 +22,12 @@ class RegisterViewModelTest {
     private lateinit var registerViewModel: RegisterViewModel
     @Before
     fun setup() {
+        val mockPreferences = AppPreferencesMock()
         registerViewModel = RegisterViewModel(
-            registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService())),
+            registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService(), mockPreferences)),
             validatePasswordUseCase = ValidatePasswordUseCase(),
-            validateEmailUseCase = ValidateEmailUseCase()
+            validateEmailUseCase = ValidateEmailUseCase(),
+            userDataRepository = UserDataRepositoryImpl(mockPreferences)
         )
     }
 

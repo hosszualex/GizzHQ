@@ -1,4 +1,4 @@
-package com.ah.gizzhq.presentation.ui
+package com.ah.gizzhq.presentation.ui.profile
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.ah.gizzhq.R
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
+import com.ah.gizzhq.presentation.ui.ProfileViewModel
 
 
 @Preview(showBackground = true)
