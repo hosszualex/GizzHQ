@@ -1,4 +1,4 @@
-package com.ah.gizzhq.data
+package com.ah.gizzhq.data.services
 
 import io.appwrite.models.Session
 import io.appwrite.models.User

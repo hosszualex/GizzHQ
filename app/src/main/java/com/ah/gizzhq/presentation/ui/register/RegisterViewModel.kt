@@ -1,18 +1,23 @@
 package com.ah.gizzhq.presentation.ui.register
 
-import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ah.gizzhq.domain.responses.RegisterResponse
+import com.ah.gizzhq.data.repositories.UserDataRepositoryImpl
+import com.ah.gizzhq.domain.models.UserData
+import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
+import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
 import com.ah.gizzhq.domain.usecases.ValidatePasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,56 +25,57 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
-    private val validatePasswordUseCase: ValidatePasswordUseCase
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val userDataRepository: UserDataRepositoryImpl
 ): ViewModel() {
+
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
-
     var email by mutableStateOf("dragana@asd.com") // todo: delete test values
         private set
-
     var password by mutableStateOf("predator1A") // todo: delete test values
         private set
-
     var retypedPassword by mutableStateOf("predator1A") // todo: delete test values
         private set
-
 
     fun onEvent(event: RegisterUiEvent) {
         when (event) {
             is RegisterUiEvent.EmailChanged -> onEmailChanged(event.email)
             is RegisterUiEvent.PasswordChanged -> onPasswordChanged(event.password)
             is RegisterUiEvent.RetypedPasswordChanged -> onRetypedPasswordChanged(event.retypedPassword)
-            is RegisterUiEvent.Register -> register(event.email, event.password)
+            is RegisterUiEvent.Register -> registerUser(event.email, event.password)
             //is RegisterUiEvent.Error -> onError()
             else -> Unit
         }
     }
 
-    private fun register(email: String, password: String) {
+    private fun registerUser(email: String, password: String) {
         viewModelScope.launch {
-            var isLoading = true
+            _uiState.update { it.copy(isLoading = true) }
+
             registerUserUseCase(email,password).let { result ->
                 when (result) {
                     is RegisterResponse.OnSuccess -> {
-                        val updatedUI = true
                     }
                     is RegisterResponse.OnErrorGeneric -> {
-                        val dsa = result.errorKey
                     }
-                    else -> {
-                        val otherErrors = true
+                    is RegisterResponse.OnErrorUserAlreadyExists -> {
+                    }
+                    is RegisterResponse.OnErrorTimeout -> {
+                    }
+                    is RegisterResponse.OnErrorNoInternet -> {
                     }
                 }
             }.also {
-                isLoading = false
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
 
     private fun onEmailChanged(email: String) {
         this.email = email
-        val updatedIsEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        val updatedIsEmailValid = validateEmailUseCase(email)
         _uiState.update {
             it.copy(
                 isEmailValid = updatedIsEmailValid,

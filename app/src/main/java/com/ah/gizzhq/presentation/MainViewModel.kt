@@ -1,25 +1,37 @@
 package com.ah.gizzhq.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ah.gizzhq.data.repositories.UserDataRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(): ViewModel() {
+class MainViewModel @Inject constructor(
+    userDataRepository: UserDataRepositoryImpl
+) : ViewModel() {
 
-    private val _isBusy = MutableStateFlow(false)
-    val isBusy = _isBusy.asStateFlow()
-
-    private val _onError = MutableStateFlow("No Error")
-    val onError = _onError.asStateFlow()
-
-    private val _onGetAvatarImages = MutableStateFlow<List<String>>(listOf())
-    val onGetAvatarImages = _onGetAvatarImages.asStateFlow()
-
-
-    fun firebaseStorage() {
-    }
-
+    val userAuthState: StateFlow<UserAuthState> = userDataRepository.userData
+        .map { userData ->
+            UserAuthState(
+                isRegistered = userData.isRegistered,
+                isLoggedIn = userData.isLoggedIn
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = UserAuthState(false, false)
+        )
 }
+
+data class UserAuthState(
+    val isRegistered: Boolean = false,
+    val isLoggedIn: Boolean = false
+)

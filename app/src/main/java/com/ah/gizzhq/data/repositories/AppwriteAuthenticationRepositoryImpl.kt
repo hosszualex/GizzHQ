@@ -1,41 +1,67 @@
 package com.ah.gizzhq.data.repositories
 
-import com.ah.gizzhq.data.Appwrite
-import com.ah.gizzhq.domain.responses.RegisterResponse
+import com.ah.gizzhq.data.AppPreferences
+import com.ah.gizzhq.data.services.Appwrite
+import com.ah.gizzhq.domain.models.responses.RegisterResponse
+import io.appwrite.exceptions.AppwriteException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class AppwriteAuthenticationRepositoryImpl @Inject constructor(
-    private val appwrite: Appwrite
+    private val appwrite: Appwrite,
+    private val preferencesDataSource: AppPreferences
 ) : AuthenticationRepository {
+
     override suspend fun login(email: String, password: String): RegisterResponse {
-        appwrite.onLogin(email, password)
-        return RegisterResponse.OnSuccess
+        runCatching {
+            appwrite.onLogin(email, password)
+        }.onSuccess {
+            return RegisterResponse.OnSuccess
+        }.onFailure { throwable ->
+            return handleRegisterError(throwable)
+        }
+            .also { // this is the default use case for return
+                return RegisterResponse.OnErrorGeneric()
+            }
     }
 
     override suspend fun registerAccount(email: String, password: String): RegisterResponse {
         runCatching {
             appwrite.onRegister(email, password)
         }.onSuccess {
-                return RegisterResponse.OnSuccess
-            }.onFailure { throwable ->
-                return handleRegisterError(throwable)
-            }
+            preferencesDataSource.setEmail(email)
+            return RegisterResponse.OnSuccess
+        }.onFailure { throwable ->
+            return handleRegisterError(throwable)
+        }
             .also { // this is the default use case for return
-                return RegisterResponse.OnErrorGeneric("unhandled-error")
+                return RegisterResponse.OnErrorGeneric()
             }
     }
 
-    override suspend fun logout() {
-        //Appwrite.onLogout()
+    override suspend fun logout() { // wip
+        runCatching {
+            appwrite.onLogout()
+        }.onSuccess {
+            preferencesDataSource.clearUserSession()
+        }.onFailure {
+
+        }
     }
 
     private fun handleRegisterError(exception: Throwable): RegisterResponse {
-        // todo: create register error handler
-        return when (exception.message) {
-            "user-exists" -> RegisterResponse.OnErrorUserAlreadyExists
-            "timeout" -> RegisterResponse.OnErrorTimeout
-            "internet-failed" -> RegisterResponse.OnErrorNoInternet
-            else -> RegisterResponse.OnErrorGeneric("unh") // todo extract error show it here
+        return when (exception) {
+            is AppwriteException -> {
+                when (exception.code) {
+                    409 -> RegisterResponse.OnErrorUserAlreadyExists
+                    else -> RegisterResponse.OnErrorGeneric(errorCode = exception.code ?: 0, errorKey = exception.type.toString())
+                }
+            }
+            is UnknownHostException, is SocketTimeoutException, is ConnectException -> RegisterResponse.OnErrorNoInternet
+            else -> RegisterResponse.OnErrorGeneric(errorKey = exception.message.toString())
         }
     }
+
 }
