@@ -26,7 +26,12 @@ import androidx.compose.ui.text.style.TextAlign
 import com.ah.gizzhq.R
 
 @Composable
-fun PasswordTextField(label: String, valuePassword: String, onValueChange: (String) -> Unit, isPasswordValid: Boolean) {
+fun PasswordTextField(
+    label: String,
+    valuePassword: String,
+    onValueChange: (String) -> Unit,
+    isPasswordValid: Boolean,
+) {
     var isVisible by remember { mutableStateOf(false) }
     TextField(
         modifier = Modifier.fillMaxWidth(),
@@ -47,12 +52,17 @@ fun PasswordTextField(label: String, valuePassword: String, onValueChange: (Stri
                     contentDescription = "Visibility",
                 )
             }
-        }
+        },
     )
 }
 
 @Composable
-fun EmailTextField(label: String, valueEmail: String, onValueChange: (String) -> Unit, isEmailValid: Boolean) {
+fun EmailTextField(
+    label: String,
+    valueEmail: String,
+    onValueChange: (String) -> Unit,
+    isEmailValid: Boolean,
+) {
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = valueEmail,
@@ -60,7 +70,7 @@ fun EmailTextField(label: String, valueEmail: String, onValueChange: (String) ->
         enabled = true,
         singleLine = true,
         label = { Text(text = label) },
-        isError = !isEmailValid
+        isError = !isEmailValid,
     )
 }
 
@@ -70,19 +80,18 @@ fun ErrorText(text: String) {
         modifier = Modifier.fillMaxWidth(),
         text = text,
         textAlign = TextAlign.Start,
-        color = Color.Red
+        color = Color.Red,
     )
 }
 
 @Composable
-fun ProgressIndicator(
-    modifier: Modifier = Modifier,
-) {
+fun ProgressIndicator(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {},
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {},
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
     }

@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppPreferences {
     val userData: Flow<UserData>
+
     suspend fun setEmail(email: String)
+
     suspend fun clearUserSession()
 }

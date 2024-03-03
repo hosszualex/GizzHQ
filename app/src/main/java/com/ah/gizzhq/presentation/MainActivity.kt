@@ -28,13 +28,12 @@ import com.ah.gizzhq.presentation.ui.CreateNewsFeed
 import com.ah.gizzhq.presentation.ui.profile.ProfileScreen
 import com.ah.gizzhq.presentation.ui.register.RegisterRoute
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     private val viewModel: MainViewModel by viewModels()
 
     @Preview(showBackground = true)
@@ -61,14 +60,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             GizzHQTheme {
-
                 val navController = rememberNavController()
                 LaunchedEffect(userAuth.isRegistered) {
-                    val route = if (userAuth.isRegistered) {
-                        "profileScreen"
-                    } else {
-                        "registerScreen"
-                    }
+                    val route =
+                        if (userAuth.isRegistered) {
+                            "profileScreen"
+                        } else {
+                            "registerScreen"
+                        }
 
                     navController.navigate(route) { popUpTo(0) }
                 }
@@ -80,14 +79,13 @@ class MainActivity : ComponentActivity() {
                     buildAccountCreationGraph(
                         this,
                         navController = navController,
-                        this@MainActivity
+                        this@MainActivity,
                     )
                 }
             }
         }
     }
 }
-
 
 private fun buildAccountCreationGraph(
     navGraphBuilder: NavGraphBuilder,
@@ -109,16 +107,18 @@ private fun buildAccountCreationGraph(
         composable("webview") {
             LoadWebUrl(
                 context = context,
-                url = "https://api.instagram.com/oauth/authorize?client_id=1753711138408921&redirect_uri=instagram.redirect.uri/auth&scope=user_profile,user_media&response_type=code"
-                //url = "https://github.com"
+                url = "https://api.instagram.com/oauth/authorize?client_id=1753711138408921&redirect_uri=instagram.redirect.uri/auth&scope=user_profile,user_media&response_type=code",
+                // url = "https://github.com"
             )
         }
     }
 }
 
-
 @Composable
-private fun LoadWebUrl(context: Context, url: String) {
+private fun LoadWebUrl(
+    context: Context,
+    url: String,
+) {
     AndroidView(factory = {
         WebView(context).apply {
             webViewClient = WebViewClient()

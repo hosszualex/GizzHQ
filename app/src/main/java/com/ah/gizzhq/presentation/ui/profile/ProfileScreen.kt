@@ -30,12 +30,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,7 +58,6 @@ import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.ProfileViewModel
 import kotlinx.coroutines.launch
 
-
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
@@ -83,80 +80,123 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
         mutableStateOf<ImageBitmap>(defaultImageAvatar)
     }
 
-    val defaultProfileAvatars = remember {
-        mutableStateListOf<Int>(
-            R.drawable.ic_profile,
-            R.drawable.avatar_1,
-            R.drawable.avatar_2,
-            R.drawable.avatar_3
-        )
-    }
-
-    val importedProfileAvatars = remember {
-        mutableStateListOf<Uri>()
-    }
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            importedProfileAvatars.add(it)
+    val defaultProfileAvatars =
+        remember {
+            mutableStateListOf<Int>(
+                R.drawable.ic_profile,
+                R.drawable.avatar_1,
+                R.drawable.avatar_2,
+                R.drawable.avatar_3,
+            )
         }
+
+    val importedProfileAvatars =
+        remember {
+            mutableStateListOf<Uri>()
+        }
+
+    val launcher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent(),
+        ) { uri: Uri? ->
+            uri?.let {
+                importedProfileAvatars.add(it)
+            }
+        }
+
+    var displayName by remember {
+        mutableStateOf("")
+    }
+
+    var aboutMe by remember {
+        mutableStateOf("")
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(8.dp)
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 bitmap = bitmap,
                 contentDescription = null,
-                modifier = Modifier
-                    .size(120.dp)
-                    .clip(CircleShape)
-                    .border(
-                        BorderStroke(4.dp, MaterialTheme.colorScheme.secondary),
-                        CircleShape
-                    )
-                    .padding(4.dp)
-                    .clickable {
-                        isSheetOpen = true
-                    },
+                modifier =
+                    Modifier
+                        .size(120.dp)
+                        .clip(CircleShape)
+                        .border(
+                            BorderStroke(4.dp, MaterialTheme.colorScheme.secondary),
+                            CircleShape,
+                        )
+                        .padding(4.dp)
+                        .clickable {
+                            isSheetOpen = true
+                        },
                 contentScale = ContentScale.Crop,
-                colorFilter = if (bitmap == defaultImageAvatar) // todo alex: find out why this changes color on first tap
-                    ColorFilter.tint(color = MaterialTheme.colorScheme.secondary)
-                else
-                    null
+                colorFilter =
+                    if (bitmap == defaultImageAvatar) {
+                        // todo alex: find out why this changes color on first tap
+                        ColorFilter.tint(color = MaterialTheme.colorScheme.secondary)
+                    } else {
+                        null
+                    },
             )
 
             Text(text = "Change profile picture")
 
             Spacer(modifier = Modifier.height(24.dp))
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp, end = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 4.dp, end = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = "Display Name:", modifier = Modifier.width(110.dp))
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = { },
+                    value = displayName,
+                    onValueChange = { newText ->
+                        if (newText.length <= 20) {
+                            displayName = newText
+                        }
+                    },
                     enabled = true,
                     singleLine = true,
                 )
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 4.dp, end = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(text = "About me:", modifier = Modifier.width(110.dp))
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = aboutMe,
+                    onValueChange = { newText ->
+                        if (newText.length <= 200) {
+                            aboutMe = newText
+                        }
+                    },
+                    enabled = true,
+                    singleLine = false,
+                )
+            }
         }
 
         val bottomSheetState = rememberModalBottomSheetState()
@@ -165,17 +205,19 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                 sheetState = bottomSheetState,
                 onDismissRequest = {
                     isSheetOpen = false
-                }) {
+                },
+            ) {
                 LazyVerticalGrid( // todo: play around with these values to find out more how they work
                     columns = GridCells.Fixed(3),
                     contentPadding = PaddingValues(12.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     items(defaultProfileAvatars.size) { item ->
                         ImageAvatar(avatar = defaultProfileAvatars[item]) {
-                            bitmap = ContextCompat.getDrawable(context, defaultProfileAvatars[item])
-                                ?.toBitmap()!!.asImageBitmap()
+                            bitmap =
+                                ContextCompat.getDrawable(context, defaultProfileAvatars[item])
+                                    ?.toBitmap()!!.asImageBitmap()
                             isSheetOpen = false
                         }
                     }
@@ -199,42 +241,57 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun ImageAvatar(avatar: Int, onAvatarClicked: (() -> Unit)? = null) {
+fun ImageAvatar(
+    avatar: Int,
+    onAvatarClicked: (() -> Unit)? = null,
+) {
     Image(
         painter = painterResource(id = avatar),
-        contentDescription = null, modifier = Modifier
-            .size(120.dp)
-            .clip(CircleShape)
-            .border(
-                BorderStroke(4.dp, MaterialTheme.colorScheme.secondary),
-                CircleShape
-            )
-            .padding(4.dp)
-            .clickable {
-                onAvatarClicked?.invoke()
-            },
+        contentDescription = null,
+        modifier =
+            Modifier
+                .size(120.dp)
+                .clip(CircleShape)
+                .border(
+                    BorderStroke(4.dp, MaterialTheme.colorScheme.secondary),
+                    CircleShape,
+                )
+                .padding(4.dp)
+                .clickable {
+                    onAvatarClicked?.invoke()
+                },
         contentScale = ContentScale.Crop,
-        colorFilter = if (avatar == R.drawable.ic_profile || avatar == R.drawable.ic_add) ColorFilter.tint(
-            color = MaterialTheme.colorScheme.secondary
-        ) else null
+        colorFilter =
+            if (avatar == R.drawable.ic_profile || avatar == R.drawable.ic_add) {
+                ColorFilter.tint(
+                    color = MaterialTheme.colorScheme.secondary,
+                )
+            } else {
+                null
+            },
     )
 }
 
 @Composable
-fun ImportedImageAvatar(avatar: Uri, onAvatarClicked: (() -> Unit)? = null) {
+fun ImportedImageAvatar(
+    avatar: Uri,
+    onAvatarClicked: (() -> Unit)? = null,
+) {
     Image(
         painter = rememberAsyncImagePainter(avatar),
-        contentDescription = null, modifier = Modifier
-            .size(120.dp)
-            .clip(CircleShape)
-            .border(
-                BorderStroke(4.dp, MaterialTheme.colorScheme.secondary),
-                CircleShape
-            )
-            .padding(4.dp)
-            .clickable {
-                onAvatarClicked?.invoke()
-            },
-        contentScale = ContentScale.Crop
+        contentDescription = null,
+        modifier =
+            Modifier
+                .size(120.dp)
+                .clip(CircleShape)
+                .border(
+                    BorderStroke(4.dp, MaterialTheme.colorScheme.secondary),
+                    CircleShape,
+                )
+                .padding(4.dp)
+                .clickable {
+                    onAvatarClicked?.invoke()
+                },
+        contentScale = ContentScale.Crop,
     )
 }

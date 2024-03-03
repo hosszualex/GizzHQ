@@ -15,13 +15,14 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `Email format is correct`() = runBlocking {
-        Assert.assertTrue(validateEmailUseCase("name@gmail.com"))
-    }
+    fun `Email format is correct`() =
+        runBlocking {
+            Assert.assertTrue(validateEmailUseCase("name@gmail.com"))
+        }
 
     @Test
-    fun `Email does not have the correct format`() = runBlocking {
-        Assert.assertFalse(validateEmailUseCase("namegmailcom"))
-    }
-
+    fun `Email does not have the correct format`() =
+        runBlocking {
+            Assert.assertFalse(validateEmailUseCase("namegmailcom"))
+        }
 }

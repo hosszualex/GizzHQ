@@ -20,15 +20,17 @@ class RegisterViewModelTest {
     val rule = InstantTaskExecutorRule()
 
     private lateinit var registerViewModel: RegisterViewModel
+
     @Before
     fun setup() {
         val mockPreferences = AppPreferencesMock()
-        registerViewModel = RegisterViewModel(
-            registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService(), mockPreferences)),
-            validatePasswordUseCase = ValidatePasswordUseCase(),
-            validateEmailUseCase = ValidateEmailUseCase(),
-            userDataRepository = UserDataRepositoryImpl(mockPreferences)
-        )
+        registerViewModel =
+            RegisterViewModel(
+                registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService(), mockPreferences)),
+                validatePasswordUseCase = ValidatePasswordUseCase(),
+                validateEmailUseCase = ValidateEmailUseCase(),
+                userDataRepository = UserDataRepositoryImpl(mockPreferences),
+            )
     }
 
     @Test
@@ -122,5 +124,4 @@ class RegisterViewModelTest {
 
         Assert.assertFalse(registerViewModel.uiState.value.isRegisterButtonEnabled)
     }
-
 }

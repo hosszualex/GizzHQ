@@ -11,9 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface BindsModule {
     @Binds
-    fun bindsAuthenticationRepositoryRepository(
-        userDataRepository: AppwriteAuthenticationRepositoryImpl,
-    ): AuthenticationRepository
-
-
+    fun bindsAuthenticationRepositoryRepository(userDataRepository: AppwriteAuthenticationRepositoryImpl): AuthenticationRepository
 }

@@ -9,8 +9,11 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class AppwriteMockService: Appwrite {
-    override suspend fun onLogin(email: String, password: String): Session {
+class AppwriteMockService : Appwrite {
+    override suspend fun onLogin(
+        email: String,
+        password: String,
+    ): Session {
         return Session(
             id = "aptent",
             createdAt = "explicari",
@@ -36,11 +39,14 @@ class AppwriteMockService: Appwrite {
             deviceModel = "liber",
             countryCode = "Niger",
             countryName = "Zimbabwe",
-            current = false
+            current = false,
         )
     }
 
-    override suspend fun onRegister(email: String, password: String): User<Map<String, Any>> {
+    override suspend fun onRegister(
+        email: String,
+        password: String,
+    ): User<Map<String, Any>> {
         val preferences = HashMap<String, String>(0)
         // todo: need to diferentiate Appwrite Exceptions vs SocketTimeoutExceptions or others t is UnknownHostException || t is SocketTimeoutException || t is ConnectException
         when (email) {
@@ -68,11 +74,11 @@ class AppwriteMockService: Appwrite {
             emailVerification = false,
             phoneVerification = false,
             prefs = Preferences(preferences),
-            accessedAt = ""
+            accessedAt = "",
         )
     }
 
     override suspend fun onLogout() {
-        //TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 }

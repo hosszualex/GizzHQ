@@ -2,9 +2,9 @@ package com.ah.gizzhq.domain.di
 
 import android.content.Context
 import com.ah.gizzhq.data.AppPreferences
+import com.ah.gizzhq.data.AppPreferencesDataSource
 import com.ah.gizzhq.data.services.Appwrite
 import com.ah.gizzhq.data.services.AppwriteService
-import com.ah.gizzhq.data.AppPreferencesDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +24,6 @@ object ProvideModule {
     @Provides
     @Singleton
     fun providesAppPreferencesDataStore(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): AppPreferences = AppPreferencesDataSource(context)
 }

@@ -31,13 +31,14 @@ import com.ah.gizzhq.R
 @Composable
 fun CreateNewsFeed(onNavigateToWebView: () -> Unit) {
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             items(2) { i ->
                 NewsFeedItem(itemCount = i)
@@ -48,37 +49,41 @@ fun CreateNewsFeed(onNavigateToWebView: () -> Unit) {
             onClick = {
                 onNavigateToWebView()
             },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 20.dp, bottom = 10.dp),
-            shape = CircleShape
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 20.dp, bottom = 10.dp),
+            shape = CircleShape,
         ) {
             Icon(Icons.Filled.Add, "")
         }
     }
 }
 
-
 @Composable
 private fun NewsFeedItem(itemCount: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
-        modifier = Modifier
-            .padding(vertical = 14.dp)
+        modifier =
+            Modifier
+                .padding(vertical = 14.dp),
     ) {
         AsyncImage(
-            model = if (itemCount % 2 == 0)
-                "https://media.npr.org/assets/img/2023/06/20/kglw---petro-press-6_credit-jason-galea_wide-033c8daa6706e9646597158523af72587dc80e32-s1100-c50.jpg"
-            else
-                "https://upload.wikimedia.org/wikipedia/commons/4/42/King_Gizzard_2019.jpg",
+            model =
+                if (itemCount % 2 == 0) {
+                    "https://media.npr.org/assets/img/2023/06/20/kglw---petro-press-6_credit-jason-galea_wide-033c8daa6706e9646597158523af72587dc80e32-s1100-c50.jpg"
+                } else {
+                    "https://upload.wikimedia.org/wikipedia/commons/4/42/King_Gizzard_2019.jpg"
+                },
             contentDescription = "King Gizz Image",
             contentScale = ContentScale.Crop,
             placeholder = painterResource(R.drawable.news_feed_placeholder),
-            modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .heightIn(0.dp, 252.dp)
-                .clip(RoundedCornerShape(10.dp))
+            modifier =
+                Modifier
+                    .padding(horizontal = 10.dp)
+                    .heightIn(0.dp, 252.dp)
+                    .clip(RoundedCornerShape(10.dp)),
         )
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -87,10 +92,10 @@ private fun NewsFeedItem(itemCount: Int) {
             Button(onClick = {}) {
                 Icon(
                     imageVector = Icons.Default.Info,
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Text(
-                    text = "Go to post"
+                    text = "Go to post",
                 )
             }
         }

@@ -15,18 +15,20 @@ object Retrofit {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
     private fun createHttpClient(): OkHttpClient {
         lateinit var okHttpClient: OkHttpClient
-        val builder = if (BuildConfig.DEBUG) {
-            val logging = HttpLoggingInterceptor()
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-            OkHttpClient.Builder()
-                .addInterceptor(logging)
-        } else {
-            OkHttpClient.Builder()
-        }.readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .connectTimeout(60, TimeUnit.SECONDS)
+        val builder =
+            if (BuildConfig.DEBUG) {
+                val logging = HttpLoggingInterceptor()
+                logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                OkHttpClient.Builder()
+                    .addInterceptor(logging)
+            } else {
+                OkHttpClient.Builder()
+            }.readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
 
         okHttpClient = builder.build()
 

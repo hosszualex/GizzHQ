@@ -5,7 +5,7 @@ import com.ah.gizzhq.domain.models.UserData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class AppPreferencesMock: AppPreferences {
+class AppPreferencesMock : AppPreferences {
     private var email: String = ""
     override val userData: Flow<UserData>
         get() = flow { UserData(email) }
