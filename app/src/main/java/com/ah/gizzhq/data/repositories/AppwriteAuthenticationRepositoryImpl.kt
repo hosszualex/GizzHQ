@@ -31,6 +31,27 @@ class AppwriteAuthenticationRepositoryImpl
                 }
         }
 
+        override suspend fun sendPhoneNumberSecret(phoneNumber: String) {
+            appwrite.sendPhoneNumberSecret(phoneNumber)
+        }
+
+        override suspend fun confirmPhoneNumberSecret(secret: String): Result<Boolean> {
+            runCatching {
+                appwrite.confirmPhoneNumberSecret(secret)
+            }.onSuccess {
+                return Result.success(true)
+            }
+                .onFailure {
+                    return Result.failure(it)
+                }.also {
+                    return Result.failure(Throwable("unknown-error"))
+                }
+        }
+
+        override suspend fun confirmPhoneSecret(secret: String) {
+            appwrite.confirmPhoneNumberSecret(secret)
+        }
+
         override suspend fun registerAccount(
             email: String,
             password: String,

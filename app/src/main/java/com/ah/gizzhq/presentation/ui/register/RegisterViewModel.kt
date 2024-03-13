@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ah.gizzhq.data.repositories.UserDataRepositoryImpl
+import com.ah.gizzhq.data.repositories.UserDataRepository
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
@@ -25,7 +25,7 @@ class RegisterViewModel
         private val registerUserUseCase: RegisterUserUseCase,
         private val validatePasswordUseCase: ValidatePasswordUseCase,
         private val validateEmailUseCase: ValidateEmailUseCase,
-        private val userDataRepository: UserDataRepositoryImpl,
+        private val userDataRepository: UserDataRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(RegisterUiState())
         val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()

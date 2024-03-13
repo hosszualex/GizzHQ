@@ -1,9 +1,14 @@
 package com.ah.gizzhq.data.services
 
+import io.appwrite.models.DocumentList
 import io.appwrite.models.Session
 import io.appwrite.models.User
 
 interface Appwrite {
+    suspend fun sendPhoneNumberSecret(phoneNumber: String)
+
+    suspend fun confirmPhoneNumberSecret(secret: String): Session
+
     suspend fun onLogin(
         email: String,
         password: String,
@@ -15,4 +20,6 @@ interface Appwrite {
     ): User<Map<String, Any>>
 
     suspend fun onLogout()
+
+    suspend fun onFetchCollection(collectionId: String): DocumentList<Map<String, Any>>
 }

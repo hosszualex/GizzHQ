@@ -75,6 +75,22 @@ fun EmailTextField(
 }
 
 @Composable
+fun PhoneNumberTextField(
+    label: String,
+    valuePhoneNumber: String,
+    onValueChange: (String) -> Unit
+) {
+    TextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = valuePhoneNumber,
+        onValueChange = onValueChange,
+        enabled = true,
+        singleLine = true,
+        label = { Text(text = label) }
+    )
+}
+
+@Composable
 fun ErrorText(text: String) {
     Text(
         modifier = Modifier.fillMaxWidth(),

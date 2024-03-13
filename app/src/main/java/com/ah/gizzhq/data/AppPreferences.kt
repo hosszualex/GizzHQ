@@ -8,5 +8,7 @@ interface AppPreferences {
 
     suspend fun setEmail(email: String)
 
+    suspend fun setUserId(userId: String)
+
     suspend fun clearUserSession()
 }

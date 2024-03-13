@@ -30,14 +30,24 @@ class AppPreferencesDataSource
             }
         }
 
+        override suspend fun setUserId(userId: String) {
+            dataStore.edit { preferences ->
+                preferences[userIdKey]
+            }
+        }
+
         override suspend fun clearUserSession() {
             dataStore.edit { preferences ->
                 preferences.remove(emailKey)
+                preferences.remove(userIdKey)
             }
         }
 
         companion object {
             private const val EMAIL = "email"
+            private const val USER_ID = "user_id"
+
             private val emailKey = stringPreferencesKey(EMAIL)
+            private val userIdKey = stringPreferencesKey(USER_ID)
         }
     }

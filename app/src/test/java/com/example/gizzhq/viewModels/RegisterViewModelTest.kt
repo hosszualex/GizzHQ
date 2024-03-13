@@ -2,7 +2,7 @@ package com.example.gizzhq.viewModels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
-import com.ah.gizzhq.data.repositories.UserDataRepositoryImpl
+import com.ah.gizzhq.data.repositories.UserDataRepository
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase
 import com.ah.gizzhq.domain.usecases.ValidatePasswordUseCase
@@ -29,7 +29,7 @@ class RegisterViewModelTest {
                 registerUserUseCase = RegisterUserUseCase(AppwriteAuthenticationRepositoryImpl(AppwriteMockService(), mockPreferences)),
                 validatePasswordUseCase = ValidatePasswordUseCase(),
                 validateEmailUseCase = ValidateEmailUseCase(),
-                userDataRepository = UserDataRepositoryImpl(mockPreferences),
+                userDataRepository = UserDataRepository(mockPreferences),
             )
     }
 

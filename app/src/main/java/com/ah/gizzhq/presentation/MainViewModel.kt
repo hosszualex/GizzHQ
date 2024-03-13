@@ -2,7 +2,7 @@ package com.ah.gizzhq.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ah.gizzhq.data.repositories.UserDataRepositoryImpl
+import com.ah.gizzhq.data.repositories.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MainViewModel
     @Inject
     constructor(
-        userDataRepository: UserDataRepositoryImpl,
+        userDataRepository: UserDataRepository,
     ) : ViewModel() {
         val userAuthState: StateFlow<UserAuthState> =
             userDataRepository.userData

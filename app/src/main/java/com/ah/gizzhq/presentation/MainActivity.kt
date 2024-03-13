@@ -26,6 +26,7 @@ import androidx.navigation.navigation
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.CreateNewsFeed
 import com.ah.gizzhq.presentation.ui.profile.ProfileScreen
+import com.ah.gizzhq.presentation.ui.profile.phoneRegister.PhoneRegisterRoute
 import com.ah.gizzhq.presentation.ui.register.RegisterRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -61,7 +62,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GizzHQTheme {
                 val navController = rememberNavController()
-                LaunchedEffect(userAuth.isRegistered) {
+/*                LaunchedEffect(userAuth.isRegistered) {
                     val route =
                         if (userAuth.isRegistered) {
                             "profileScreen"
@@ -70,7 +71,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                     navController.navigate(route) { popUpTo(0) }
-                }
+                }*/
 
                 // todo: add loading bar in the Main Activity
                 // todo: add error popup in the Main Activity
@@ -92,7 +93,10 @@ private fun buildAccountCreationGraph(
     navController: NavController,
     context: MainActivity,
 ) {
-    navGraphBuilder.navigation(route = "accountCreation", startDestination = "registerScreen") {
+    navGraphBuilder.navigation(route = "accountCreation", startDestination = "phoneNumberRegisterScreen") {
+        composable("phoneNumberRegisterScreen") {
+            PhoneRegisterRoute()
+        }
         composable("registerScreen") {
             RegisterRoute()
         }

@@ -13,5 +13,11 @@ interface AuthenticationRepository {
         password: String,
     ): RegisterResponse
 
+    suspend fun sendPhoneNumberSecret(phoneNumber: String)
+
+    suspend fun confirmPhoneNumberSecret(secret: String): Result<Boolean>
+
+    suspend fun confirmPhoneSecret(secret: String)
+
     suspend fun logout()
 }

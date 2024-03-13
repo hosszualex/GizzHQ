@@ -62,7 +62,6 @@ import com.ah.gizzhq.domain.utils.defaultLog
 import com.ah.gizzhq.domain.utils.toBitmap
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.ProfileViewModel
-import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
@@ -153,7 +152,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                     contentScale = ContentScale.Crop,
                     colorFilter =
                         if (bitmap == defaultImageAvatar) {
-                            // todo alex: find out why this changes color on first tap
+                            // todo: find out why this changes color on first tap
                             ColorFilter.tint(color = MaterialTheme.colorScheme.secondary)
                         } else {
                             null
@@ -270,6 +269,8 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
         FloatingActionButton(
             onClick = {
                 keyboardController?.hide()
+                // todo
+                viewModel.sendPhoneNumber()
             },
             shape = CircleShape,
             modifier =
