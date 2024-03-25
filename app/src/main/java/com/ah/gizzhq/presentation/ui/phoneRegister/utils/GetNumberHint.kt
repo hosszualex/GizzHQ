@@ -1,4 +1,4 @@
-package com.ah.gizzhq.xmaterialccp.data.utils
+package com.ah.gizzhq.presentation.ui.phoneRegister.utils
 
 import com.ah.gizzhq.R
 

@@ -20,7 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
 import com.ah.gizzhq.presentation.ui.profile.ProfileScreen
-import com.ah.gizzhq.presentation.ui.profile.phoneRegister.PhoneRegisterRoute
+import com.ah.gizzhq.presentation.ui.phoneRegister.PhoneRegisterRoute
 import com.ah.gizzhq.presentation.ui.register.RegisterRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect

@@ -1,6 +1,6 @@
-package com.ah.gizzhq.xmaterialccp.data.utils
+package com.ah.gizzhq.presentation.ui.phoneRegister.utils
 
-import com.ah.gizzhq.xmaterialccp.data.CountryData
+import com.ah.gizzhq.presentation.ui.phoneRegister.CountryData
 
 fun getLibCountries(): List<CountryData> {
     val countries: MutableList<CountryData> = ArrayList()

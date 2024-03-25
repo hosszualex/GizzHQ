@@ -1,7 +1,5 @@
-package com.ah.gizzhq.presentation.ui.profile.phoneRegister
+package com.ah.gizzhq.presentation.ui.phoneRegister
 
-import android.nfc.NdefMessage
-import android.nfc.tech.Ndef
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ah.gizzhq.data.repositories.UserDataRepository
@@ -19,7 +17,6 @@ class PhoneRegisterViewModel
     @Inject
     constructor(
         private val sendPhoneNumberSecretUseCase: SendPhoneNumberSecretUseCase,
-        private val userDataRepository: UserDataRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(PhoneNumberRegisterUiState())
         val uiState: StateFlow<PhoneNumberRegisterUiState> = _uiState.asStateFlow()
@@ -55,15 +52,13 @@ class PhoneRegisterViewModel
 
 sealed interface PhoneNumberRegisterUiEvent {
     data class PhoneNumberChanged(val phoneNumber: String) : PhoneNumberRegisterUiEvent
-
     data class SendPhoneNumberSecret(val phoneNumber: String) : PhoneNumberRegisterUiEvent
-
     data class Error(val errorMessage: String) : PhoneNumberRegisterUiEvent
 }
 
 data class PhoneNumberRegisterUiState(
     val isLoading: Boolean = false,
-    val isRegisterButtonEnabled: Boolean = true, // todo: change it to false
+    val isNextButtonEnabled: Boolean = true, // todo: change it to false
     val isPhoneNumberValid: Boolean = true,
     val error: Error? = null,
 )
