@@ -1,4 +1,4 @@
-package com.ah.gizzhq.data.repositories
+package com.ah.gizzhq.data.repositories.authentication
 
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
 

@@ -1,6 +1,6 @@
 package com.ah.gizzhq.domain.usecases
 
-import com.ah.gizzhq.data.repositories.AuthenticationRepository
+import com.ah.gizzhq.data.repositories.authentication.AuthenticationRepository
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.ah.gizzhq.data.repositories
+package com.ah.gizzhq.data.repositories.authentication
 
 import com.ah.gizzhq.data.AppPreferences
 import com.ah.gizzhq.data.services.Appwrite

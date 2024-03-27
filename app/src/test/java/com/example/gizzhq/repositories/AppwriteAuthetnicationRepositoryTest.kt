@@ -1,7 +1,7 @@
 package com.example.gizzhq.repositories
 
-import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
-import com.ah.gizzhq.data.repositories.AuthenticationRepository
+import com.ah.gizzhq.data.repositories.authentication.AppwriteAuthenticationRepositoryImpl
+import com.ah.gizzhq.data.repositories.authentication.AuthenticationRepository
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import com.example.gizzhq.mocks.AppPreferencesMock
 import com.example.gizzhq.mocks.AppwriteMockService

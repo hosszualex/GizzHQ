@@ -21,5 +21,5 @@ interface Appwrite {
 
     suspend fun onLogout()
 
-    suspend fun onFetchCollection(collectionId: String): DocumentList<Map<String, Any>>
+    suspend fun onFetchCollection(collectionId: String, queryLimit: Int = 25, offset: Int = 0): DocumentList<Map<String, Any>>
 }

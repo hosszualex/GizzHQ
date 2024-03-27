@@ -13,13 +13,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.GizzHQ"
-        android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/Theme.GizzHQ">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

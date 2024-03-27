@@ -1,6 +1,7 @@
 package com.ah.gizzhq
 
 import android.app.Application
+import androidx.multidex.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

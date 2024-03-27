@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -26,4 +27,10 @@ object ProvideModule {
     fun providesAppPreferencesDataStore(
         @ApplicationContext context: Context,
     ): AppPreferences = AppPreferencesDataSource(context)
+
+    @Provides
+    @Singleton
+    fun providesNetworkJson(): Json = Json {
+        ignoreUnknownKeys = true
+    }
 }

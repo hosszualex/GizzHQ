@@ -1,6 +1,6 @@
 package com.ah.gizzhq.domain.usecases
 
-import com.ah.gizzhq.data.repositories.AuthenticationRepository
+import com.ah.gizzhq.data.repositories.authentication.AuthenticationRepository
 import javax.inject.Inject
 
 class SendPhoneNumberSecretUseCase

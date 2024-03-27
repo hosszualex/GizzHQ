@@ -1,7 +1,7 @@
 package com.example.gizzhq.viewModels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
+import com.ah.gizzhq.data.repositories.authentication.AppwriteAuthenticationRepositoryImpl
 import com.ah.gizzhq.data.repositories.UserDataRepository
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.ah.gizzhq.domain.usecases.ValidateEmailUseCase

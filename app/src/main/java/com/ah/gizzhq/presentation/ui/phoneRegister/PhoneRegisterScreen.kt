@@ -1,8 +1,6 @@
 package com.ah.gizzhq.presentation.ui.phoneRegister
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,27 +39,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import com.ah.gizzhq.domain.models.PhoneNumberCountryCode
 import com.ah.gizzhq.presentation.theme.GizzHQTheme
-import com.ah.gizzhq.presentation.ui.ProgressIndicator
-import com.ah.gizzhq.presentation.ui.phoneRegister.utils.getCountryName
-import com.ah.gizzhq.presentation.ui.phoneRegister.utils.getDefaultLangCode
-import com.ah.gizzhq.presentation.ui.phoneRegister.utils.getDefaultPhoneCode
-import com.ah.gizzhq.presentation.ui.phoneRegister.utils.getLibCountries
-import com.ah.gizzhq.presentation.ui.phoneRegister.utils.getNumberHint
+
 
 @Composable
-fun PhoneRegisterRoute(viewModel: PhoneRegisterViewModel = hiltViewModel()) {
+fun PhoneRegisterRoute(
+    viewModel: PhoneRegisterViewModel = hiltViewModel(),
+    onError: (Throwable) -> Unit,
+    onLoading: (Boolean) -> Unit
+) {
     val uiState by viewModel.uiState.collectAsState()
 
+    uiState.error?.let { onError(it) }
+    onLoading(uiState.isLoading)
+    LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+        viewModel.onEvent(PhoneNumberRegisterUiEvent.OnGetPhoneNumberCountryCodes)
+    }
     PhoneRegisterScreen(
         uiState,
         viewModel::onEvent,
@@ -74,23 +77,22 @@ fun PhoneRegisterScreen(
     onEvent: (PhoneNumberRegisterUiEvent) -> Unit,
 ) {
 
-    val context = LocalContext.current
-
     var phoneNumber by remember {
         mutableStateOf("")
     }
 
-    var phoneCode by remember { mutableStateOf(getDefaultPhoneCode(context)) }
-    val defaultLang by rememberSaveable { mutableStateOf(getDefaultLangCode(context)) }
-    var pickedCountry by remember {
+    var pickedCountryCode by remember {
         mutableStateOf(
-            getLibCountries().single { it.countryCode == defaultLang }
+            PhoneNumberCountryCode(
+                countryCode = "",
+                countryName = "",
+                countryPhoneCode = "",
+                phoneNumberHint = ""
+            )
         )
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    // call the viewModel variable and call the next screen
-    // should be in UI state and call the on navigate to profile
 
     Column(
         modifier = Modifier.padding(16.dp),
@@ -113,11 +115,10 @@ fun PhoneRegisterScreen(
                 }
             },
             singleLine = true,
-            visualTransformation = PhoneNumberTransformation(pickedCountry.countryCode.uppercase()),
             placeholder = {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(id = getNumberHint(pickedCountry.countryCode))
+                    text = pickedCountryCode.phoneNumberHint
                 )
             },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -127,15 +128,13 @@ fun PhoneRegisterScreen(
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             leadingIcon = {
                 CountryCodePicker(
-                    pickedCountry,
-                    countryList = getLibCountries(),
+                    pickedCountryCode,
+                    countryList = uiState.phoneNumberCountryCodes.toList(),
                     onPickedCountry = { newPickedCountry ->
-                        pickedCountry = newPickedCountry
+                        pickedCountryCode = newPickedCountry
                     })
             }
         )
-
-
 
         Spacer(modifier = Modifier.height(36.dp))
         Button(
@@ -148,23 +147,15 @@ fun PhoneRegisterScreen(
             Text(text = "Register Account")
         }
     }
-
-    AnimatedVisibility(
-        visible = uiState.isLoading,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        ProgressIndicator()
-    }
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CountryCodePicker(
-    defaultCountry: CountryData,
-    countryList: List<CountryData>,
-    onPickedCountry: (CountryData) -> Unit
+    defaultCountry: PhoneNumberCountryCode,
+    countryList: List<PhoneNumberCountryCode>,
+    onPickedCountry: (PhoneNumberCountryCode) -> Unit
 ) {
     var isSheetOpen by remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
@@ -231,7 +222,7 @@ fun CountryCodePicker(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = getCountryName(countryItem.countryCode.lowercase())),
+                            text = countryItem.countryName,
                             maxLines = 1,
                             textAlign = TextAlign.Start,
                             overflow = TextOverflow.Ellipsis,

@@ -1,7 +1,7 @@
 package com.example.gizzhq.usecases
 
 import android.content.Context
-import com.ah.gizzhq.data.repositories.AppwriteAuthenticationRepositoryImpl
+import com.ah.gizzhq.data.repositories.authentication.AppwriteAuthenticationRepositoryImpl
 import com.ah.gizzhq.domain.models.responses.RegisterResponse
 import com.ah.gizzhq.domain.usecases.RegisterUserUseCase
 import com.example.gizzhq.mocks.AppPreferencesMock

@@ -7,8 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import com.ah.gizzhq.presentation.ui.phoneRegister.CountryData
-import com.ah.gizzhq.presentation.ui.phoneRegister.utils.getCountryName
 
 fun defaultLog(message: String) {
     Log.d("=======>", message)
@@ -27,14 +25,4 @@ fun Uri.toBitmap(context: Context): Bitmap? {
         }
 
     return bitmap
-}
-
-fun List<CountryData>.searchCountry(key: String, context: Context): MutableList<CountryData> {
-    val tempList = mutableListOf<CountryData>()
-    this.forEach {
-        if (context.resources.getString(getCountryName(it.countryCode)).lowercase().contains(key.lowercase())) {
-            tempList.add(it)
-        }
-    }
-    return tempList
 }
